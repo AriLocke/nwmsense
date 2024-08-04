@@ -6,38 +6,19 @@
 #include "comp_output.h"
 
 #include <stdlib.h>
-#include <wlr/render/wlr_renderer.h>
 #include <wlr/util/log.h>
 
 #include <assert.h>
 #include <getopt.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
 #include <wayland-server-core.h>
-#include <wlr/backend.h>
-#include <wlr/interfaces/wlr_output.h>
-#include <wlr/render/allocator.h>
-#include <wlr/render/wlr_renderer.h>
 #include <wlr/types/wlr_compositor.h>
-#include <wlr/types/wlr_cursor.h>
-#include <wlr/types/wlr_data_device.h>
-#include <wlr/types/wlr_input_device.h>
-#include <wlr/types/wlr_keyboard.h>
 #include <wlr/types/wlr_output.h>
 #include <wlr/types/wlr_output_layout.h>
-#include <wlr/types/wlr_pointer.h>
 #include <wlr/types/wlr_scene.h>
-#include <wlr/types/wlr_seat.h>
-#include <wlr/types/wlr_subcompositor.h>
-#include <wlr/types/wlr_xcursor_manager.h>
-#include <wlr/types/wlr_xdg_shell.h>
-#include <wlr/util/log.h>
-#include <xkbcommon/xkbcommon.h>
-
-#include <wlr/interfaces/wlr_buffer.h>
 
 /** Raised by backend when a new display becomes available */
 void new_output_notify (struct wl_listener *listener, void *data) {
@@ -97,17 +78,16 @@ static void output_frame_notify (struct wl_listener *listener, void *data) {
         struct comp_output *output = wl_container_of (listener, output, frame);
         struct wlr_scene   *scene  = output->server->scene;
 
-        // struct wlr_scene_output *scene_output
-        // = wlr_scene_get_scene_output (scene, output->wlr_output);
-        //
-        // /* Render the scene if needed and commit the output */
-        // if (scene_output != NULL) // May be unnecessary but may be necessary but may be
-        // unnecessary
-        //         wlr_scene_output_commit (scene_output, NULL);
-        //
-        // struct timespec now;
-        // clock_gettime (CLOCK_MONOTONIC, &now);
-        // wlr_scene_output_send_frame_done (scene_output, &now);
+        struct wlr_scene_output *scene_output
+            = wlr_scene_get_scene_output (scene, output->wlr_output);
+
+        /* Render the scene if needed and commit the output */
+        if (scene_output != NULL) // May be unnecessary but may be necessary but may be unnecessary
+                wlr_scene_output_commit (scene_output, NULL);
+
+        struct timespec now;
+        clock_gettime (CLOCK_MONOTONIC, &now);
+        wlr_scene_output_send_frame_done (scene_output, &now);
 }
 
 static void output_destroy_notify (struct wl_listener *listener, void *data) {

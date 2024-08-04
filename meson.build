@@ -17,7 +17,10 @@ xkbcommon_dep = dependency('xkbcommon')
 add_project_arguments([ '-DWLR_USE_UNSTABLE' ], language: 'c')
 
 # Source files
-src = ['src/main.c', 'src/comp_server.c', 'src/comp_output.c']
+src = ['src/main.c',
+       'src/comp_server.c',
+       'src/comp_output.c',
+       'src/comp_xdg_shell.c']
 
 ## Setup Compile Target
 compositions = executable('compositions',

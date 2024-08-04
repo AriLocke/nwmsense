@@ -7,10 +7,6 @@
 
 #include "comp_server.h"
 
-#include <wayland-server-core.h>
-#include <wlr/types/wlr_output.h>
-#include <wlr/types/wlr_xdg_shell.h>
-
 struct comp_output
 {
         struct wlr_output  *wlr_output;

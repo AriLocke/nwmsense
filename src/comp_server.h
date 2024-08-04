@@ -19,6 +19,11 @@ struct comp_server
         struct wlr_scene               *scene;
         struct wlr_scene_output_layout *scene_layout;
 
+        struct wlr_xdg_shell *xdg_shell;
+        struct wl_listener    new_xdg_toplevel;
+        struct wl_listener    new_xdg_popup;
+        struct wl_list        toplevels;
+
         struct wl_listener new_output;
         struct wl_list     outputs; // comp_output::link
 };
