@@ -5,10 +5,10 @@
 #ifndef COMP_XDG_SHELL_H
 #define COMP_XDG_SHELL_H
 
-#include "comp_server.h"
+#include "nwm_server.h"
 #include <wlr/types/wlr_xdg_shell.h>
 
-struct comp_toplevel
+struct toplevel
 {
         struct wl_list           link;
         struct comp_server      *server;
@@ -24,12 +24,19 @@ struct comp_toplevel
         struct wl_listener       request_fullscreen;
 };
 
-struct comp_popup
+struct popup
 {
         struct wlr_xdg_popup *xdg_popup;
         struct wl_listener    commit;
         struct wl_listener    destroy;
 };
+
+struct toplevel *desktop_toplevel_at (struct comp_server  *server,
+                                      double               lx,
+                                      double               ly,
+                                      struct wlr_surface **surface,
+                                      double              *sx,
+                                      double              *sy);
 
 void new_xdg_toplevel_notify (struct wl_listener *listener, void *data);
 void xdg_toplevel_map_notify (struct wl_listener *listener, void *data);
